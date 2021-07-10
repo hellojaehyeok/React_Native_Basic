@@ -7,7 +7,7 @@ React_Native 기초 공부입니다.
 1. CSS를 설정할 때 object의 namespace를 이용한다.
 2. 각 스타일의 속성의 구분은 ; 가 아닌 , 로 구분한다.
 3. 스타일 속성 명의 구분은 -이 아닌 대문자로 구분한다. (font-weight  -> fontWeight)
-4. 'px', 'em' 등의 단위는 생략한다.
+4. 'px', 'em' 등의 단위는 생략한다. -> rem 을 사용한다
 
 RN
 
@@ -84,3 +84,73 @@ secureTextEntry={true} 를 사용하여야 한다.
     style={styles.inputBox}
     onChangeText={(e) => {onChangeName(e)}}
     />
+
+### FlatList 
+react에서는 map을 사용하였으면 RN에서는 FlatList를 지향한다.
+
+    const listArr = ["A", "B", "C", "D", "E"];
+
+    const renderListEl = ({item, index}) => {
+        return(
+            <Text>{item}</Text>
+        )
+    }
+
+    <View>
+        <FlatList
+        // 반복을 할 배열
+        data={listArr}
+        // 렌더 할 아이템
+        renderItem={renderListEl}
+        // 교유 키값
+        keyExtractor={(item, index) => index.toString()}
+        >
+    </View>
+
+## Singleton
+react에 redux가 있다면 RN에는 singleton이 있다.             
+
+선언
+
+    export default class AddressSingleton {
+
+    static myInstance = null;
+
+    // 사용할 변수를 선언한다.
+    _area = "";
+
+    // getInstance를 활용해서 기존 값이 없으면 새로운 값을 넣고 있으면 그 값을 반환한다.
+    static getInstance() {
+        if (AddressSingleton.myInstance == null) {
+            AddressSingleton.myInstance = new AddressSingleton();
+        }
+     
+        return this.myInstance;
+    }
+
+    // 사용할 함수를 선언한다.
+    returnArea (){
+        return this._area
+    }
+
+활용
+
+    // 접근한다.
+    import addressSingleton from '../../db/addressSingleton';
+    .
+    .
+    .
+    // getInstance()를 활용해주어야한다.
+    console.log(addressSingleton.getInstance()._area)
+
+
+##  React-Native APK 추출
+android 폴더에서 cmd를 열고 실행시키면 apk가 생선된다.
+
+    gradlew assembleRelease
+
+## React-Native run multiple emulator
+동시에 여러개의 emulator를 실행시키기 위하여 cmd에다 아래 코드를 실행시킨다.
+
+    react-native run-android --port 8081 --deviceId emulator-5556
+    
